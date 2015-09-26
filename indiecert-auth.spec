@@ -12,7 +12,7 @@
 
 Name:       indiecert-auth
 Version:    1.0.0
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    IndieCert Authentication
 
 Group:      Applications/Internet
@@ -58,8 +58,7 @@ Requires(post): policycoreutils-python
 Requires(postun): policycoreutils-python
 
 %description
-This project provides a user interface for managing OpenVPN configurations 
-using the vpn-cert-service software.
+IndieCert Authentication.
 
 %prep
 %setup -qn %{github_name}-%{github_commit} 
@@ -115,5 +114,9 @@ fi
 %license agpl-3.0.txt
 
 %changelog
+* Sat Sep 26 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-2
+- update description
+- update rewrite base in httpd config
+
 * Sat Sep 26 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-1
 - initial package

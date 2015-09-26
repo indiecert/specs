@@ -12,7 +12,7 @@
 
 Name:       indiecert-enroll
 Version:    1.0.0
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    IndieCert Enrollment
 
 Group:      Applications/Internet
@@ -62,16 +62,32 @@ install -m 0644 -D -p %{SOURCE2} ${RPM_BUILD_ROOT}%{_sysconfdir}/httpd/conf.d/%{
 mkdir -p ${RPM_BUILD_ROOT}%{_datadir}/%{name}
 cp -pr web views src ${RPM_BUILD_ROOT}%{_datadir}/%{name}
 
+mkdir -p ${RPM_BUILD_ROOT}%{_bindir}
+cp -pr bin/* ${RPM_BUILD_ROOT}%{_bindir}
+
+# Config
+mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/%{name}
+cp -p config/config.ini.default ${RPM_BUILD_ROOT}%{_sysconfdir}/%{name}/config.ini
+ln -s ../../../etc/%{name} ${RPM_BUILD_ROOT}%{_datadir}/%{name}/config
+
 %files
 %defattr(-,root,root,-)
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
+%dir %attr(-,apache,apache) %{_sysconfdir}/%{name}
+%config(noreplace) %attr(0600,apache,apache) %{_sysconfdir}/%{name}/config.ini
+%{_bindir}/*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/src
 %{_datadir}/%{name}/web
+%{_datadir}/%{name}/config
 %{_datadir}/%{name}/views
-%doc README.md CHANGES.md composer.json
+%doc README.md CHANGES.md composer.json config/config.ini.default
 %license agpl-3.0.txt
 
 %changelog
+* Sat Sep 26 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-2
+- install config file
+- install scripts from bin directory
+
 * Sat Sep 26 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-1
 - initial package

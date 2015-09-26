@@ -12,7 +12,7 @@
 
 Name:       indiecert-enroll
 Version:    1.0.0
-Release:    2%{?dist}
+Release:    4%{?dist}
 Summary:    IndieCert Enrollment
 
 Group:      Applications/Internet
@@ -43,6 +43,9 @@ Requires:   php-composer(phpseclib/phpseclib) >= 2.0.0
 Requires:   php-composer(phpseclib/phpseclib) < 3.0.0
 Requires:   php-composer(symfony/class-loader)
 
+Requires(post): policycoreutils-python
+Requires(postun): policycoreutils-python
+
 %description
 IndieCert Enrollment.
 
@@ -50,7 +53,9 @@ IndieCert Enrollment.
 %setup -qn %{github_name}-%{github_commit} 
 cp %{SOURCE1} src/%{composer_namespace}/autoload.php
 
+sed -i "s|require_once dirname(__DIR__).'/vendor/autoload.php';|require_once '%{_datadir}/%{name}/src/%{composer_namespace}/autoload.php';|" bin/*
 sed -i "s|require_once dirname(__DIR__).'/vendor/autoload.php';|require_once '%{_datadir}/%{name}/src/%{composer_namespace}/autoload.php';|" web/*.php
+sed -i "s|dirname(__DIR__)|'%{_datadir}/%{name}'|" bin/*
 
 %build
 
@@ -70,6 +75,18 @@ mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/%{name}
 cp -p config/config.ini.default ${RPM_BUILD_ROOT}%{_sysconfdir}/%{name}/config.ini
 ln -s ../../../etc/%{name} ${RPM_BUILD_ROOT}%{_datadir}/%{name}/config
 
+# Data
+mkdir -p ${RPM_BUILD_ROOT}%{_localstatedir}/lib/%{name}
+
+%post
+semanage fcontext -a -t httpd_sys_rw_content_t '%{_localstatedir}/lib/%{name}(/.*)?' 2>/dev/null || :
+restorecon -R %{_localstatedir}/lib/%{name} || :
+
+%postun
+if [ $1 -eq 0 ] ; then  # final removal
+semanage fcontext -d -t httpd_sys_rw_content_t '%{_localstatedir}/lib/%{name}(/.*)?' 2>/dev/null || :
+fi
+
 %files
 %defattr(-,root,root,-)
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
@@ -81,10 +98,17 @@ ln -s ../../../etc/%{name} ${RPM_BUILD_ROOT}%{_datadir}/%{name}/config
 %{_datadir}/%{name}/web
 %{_datadir}/%{name}/config
 %{_datadir}/%{name}/views
+%dir %attr(0700,apache,apache) %{_localstatedir}/lib/%{name}
 %doc README.md CHANGES.md composer.json config/config.ini.default
 %license agpl-3.0.txt
 
 %changelog
+* Sat Sep 26 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-4
+- add data dir
+
+* Sat Sep 26 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-3
+- fix require path in bin script
+
 * Sat Sep 26 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-2
 - install config file
 - install scripts from bin directory

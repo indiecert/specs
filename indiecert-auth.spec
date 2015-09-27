@@ -12,7 +12,7 @@
 
 Name:       indiecert-auth
 Version:    1.0.0
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    IndieCert Authentication
 
 Group:      Applications/Internet
@@ -114,6 +114,9 @@ fi
 %license agpl-3.0.txt
 
 %changelog
+* Sat Sep 26 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-3
+- fix GuzzleHttp autoload for now
+
 * Sat Sep 26 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-2
 - update description
 - update rewrite base in httpd config

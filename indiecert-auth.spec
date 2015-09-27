@@ -2,7 +2,7 @@
 
 %global github_owner            indiecert
 %global github_name             auth
-%global github_commit           8125abd7ad6b88205c203bf878edf91851c97cc3
+%global github_commit           b669a36e2f39e2e0d38186dc3d4fadbeee8b5b04
 %global github_short            %(c=%{github_commit}; echo ${c:0:7})
 %if 0%{?rhel} == 5
 %global with_tests              0%{?_with_tests:1}
@@ -11,8 +11,8 @@
 %endif
 
 Name:       indiecert-auth
-Version:    1.0.0
-Release:    3%{?dist}
+Version:    1.0.1
+Release:    1%{?dist}
 Summary:    IndieCert Authentication
 
 Group:      Applications/Internet
@@ -26,9 +26,39 @@ Source2:    %{name}-httpd.conf
 BuildArch:  noarch
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n) 
 
+%if %{with_tests}
+BuildRequires:  php(language) >= 5.4
+BuildRequires:  php-apc
+BuildRequires:  php-dom
+BuildRequires:  php-filter
+BuildRequires:  php-libxml
+BuildRequires:  php-pcre
+BuildRequires:  php-pdo
+BuildRequires:  php-standard
+
+BuildRequires:  php-composer(symfony/class-loader)
+BuildRequires:  %{_bindir}/phpunit
+BuildRequires:  %{_bindir}/phpab
+BuildRequires:  php-composer(fkooman/io) >= 1.0.0
+BuildRequires:  php-composer(fkooman/io) < 2.0.0
+BuildRequires:  php-composer(fkooman/rest) >= 1.0.0
+BuildRequires:  php-composer(fkooman/rest) < 2.0.0
+BuildRequires:  php-composer(fkooman/tpl) >= 2.0.0
+BuildRequires:  php-composer(fkooman/tpl) < 3.0.0
+BuildRequires:  php-composer(fkooman/ini) >= 1.0.0
+BuildRequires:  php-composer(fkooman/ini) < 2.0.0
+BuildRequires:  php-composer(fkooman/tpl-twig) >= 1.0.0
+BuildRequires:  php-composer(fkooman/tpl-twig) < 2.0.0
+BuildRequires:  php-composer(fkooman/rest-plugin-authentication-indieauth) >= 1.0.0
+BuildRequires:  php-composer(fkooman/rest-plugin-authentication-indieauth) < 2.0.0
+BuildRequires:  php-composer(fkooman/rest-plugin-authentication-tls) >= 1.0.0
+BuildRequires:  php-composer(fkooman/rest-plugin-authentication-tls) < 2.0.0
+BuildRequires:  php-composer(guzzlehttp/guzzle) >= 5.3
+BuildRequires:  php-composer(guzzlehttp/guzzle) < 6.0
+%endif
+
 Requires:   httpd
 Requires:   mod_ssl
-
 Requires:   php(language) >= 5.4
 Requires:   php-apc
 Requires:   php-dom
@@ -45,7 +75,6 @@ Requires:   php-composer(fkooman/rest) >= 1.0.1
 Requires:   php-composer(fkooman/rest) < 2.0.0
 Requires:   php-composer(fkooman/tpl-twig) >= 1.0.0
 Requires:   php-composer(fkooman/tpl-twig) < 2.0.0
-
 Requires:   php-composer(fkooman/rest-plugin-authentication-indieauth) >= 1.0.0
 Requires:   php-composer(fkooman/rest-plugin-authentication-indieauth) < 2.0.0
 Requires:   php-composer(fkooman/rest-plugin-authentication-tls) >= 1.0.0
@@ -71,23 +100,28 @@ sed -i "s|dirname(__DIR__)|'%{_datadir}/%{name}'|" bin/*
 %build
 
 %install
-# Apache configuration
-install -m 0644 -D -p %{SOURCE2} ${RPM_BUILD_ROOT}%{_sysconfdir}/httpd/conf.d/%{name}.conf
+rm -rf %{buildroot}
 
-# Application
+install -m 0644 -D -p %{SOURCE2} ${RPM_BUILD_ROOT}%{_sysconfdir}/httpd/conf.d/%{name}.conf
 mkdir -p ${RPM_BUILD_ROOT}%{_datadir}/%{name}
 cp -pr web views src ${RPM_BUILD_ROOT}%{_datadir}/%{name}
-
 mkdir -p ${RPM_BUILD_ROOT}%{_bindir}
 cp -pr bin/* ${RPM_BUILD_ROOT}%{_bindir}
-
-# Config
 mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/%{name}
 cp -p config/config.ini.example ${RPM_BUILD_ROOT}%{_sysconfdir}/%{name}/config.ini
 ln -s ../../../etc/%{name} ${RPM_BUILD_ROOT}%{_datadir}/%{name}/config
-
-# Data
 mkdir -p ${RPM_BUILD_ROOT}%{_localstatedir}/lib/%{name}
+
+%if %{with_tests} 
+%check
+%{_bindir}/phpab --output tests/bootstrap.php tests
+echo 'require_once "%{buildroot}%{_datadir}/%{name}/src/%{composer_namespace}/autoload.php";' >> tests/bootstrap.php
+%{_bindir}/phpunit \
+    --bootstrap tests/bootstrap.php
+%endif
+
+%clean
+rm -rf %{buildroot}
 
 %post
 semanage fcontext -a -t httpd_sys_rw_content_t '%{_localstatedir}/lib/%{name}(/.*)?' 2>/dev/null || :
@@ -114,6 +148,15 @@ fi
 %license agpl-3.0.txt
 
 %changelog
+* Sun Sep 27 2015 François Kooman <fkooman@tuxed.net> - 1.0.1-1
+- update to 1.0.1
+
+* Sun Sep 27 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-5
+- add fkooman/ini and fkooman/tpl-twig to BuildRequires
+
+* Sun Sep 27 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-4
+- run tests during build
+
 * Sat Sep 26 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-3
 - fix GuzzleHttp autoload for now
 

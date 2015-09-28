@@ -12,7 +12,7 @@
 
 Name:       indiecert-oauth
 Version:    1.0.0
-Release:    1%{?dist}
+Release:    3%{?dist}
 Summary:    IndieCert OAuth
 
 Group:      Applications/Internet
@@ -41,8 +41,8 @@ Requires:   php-composer(fkooman/tpl-twig) >= 1.0.0
 Requires:   php-composer(fkooman/tpl-twig) < 2.0.0
 Requires:   php-composer(symfony/class-loader)
 
-Requires(post): policycoreutils-python
-Requires(postun): policycoreutils-python
+Requires(post): %{_sbindir}/semanage
+Requires(postun): %{_sbindir}/semanage
 
 %description
 IndieCert OAuth.
@@ -101,5 +101,11 @@ fi
 %license agpl-3.0.txt
 
 %changelog
+* Mon Sep 28 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-3
+- simpler way to require semanage
+
+* Mon Sep 28 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-2
+- fix selinux handling on fedora >= 23
+
 * Sun Sep 27 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-1
 - initial package

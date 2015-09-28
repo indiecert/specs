@@ -12,7 +12,7 @@
 
 Name:       indiecert-enroll
 Version:    1.0.0
-Release:    4%{?dist}
+Release:    6%{?dist}
 Summary:    IndieCert Enrollment
 
 Group:      Applications/Internet
@@ -43,8 +43,8 @@ Requires:   php-composer(phpseclib/phpseclib) >= 2.0.0
 Requires:   php-composer(phpseclib/phpseclib) < 3.0.0
 Requires:   php-composer(symfony/class-loader)
 
-Requires(post): policycoreutils-python
-Requires(postun): policycoreutils-python
+Requires(post): %{_sbindir}/semanage
+Requires(postun): %{_sbindir}/semanage
 
 %description
 IndieCert Enrollment.
@@ -103,6 +103,12 @@ fi
 %license agpl-3.0.txt
 
 %changelog
+* Mon Sep 28 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-6
+- simpler way to require semanage
+
+* Mon Sep 28 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-5
+- fix selinux handling on fedora >= 23
+
 * Sat Sep 26 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-4
 - add data dir
 

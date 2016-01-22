@@ -18,13 +18,13 @@ $fedoraClassLoader->addPrefixes(array(
     'fkooman\\IndieCert\\Auth' => dirname(dirname(dirname(__DIR__))),
 ));
 
-require_once $vendorDir.'/fkooman/Ini/autoload.php';
+require_once $vendorDir.'/fkooman/Config/autoload.php';
+require_once $vendorDir.'/fkooman/Http/autoload.php';
 require_once $vendorDir.'/fkooman/IO/autoload.php';
+require_once $vendorDir.'/fkooman/Json/autoload.php';
 require_once $vendorDir.'/fkooman/Rest/autoload.php';
-require_once $vendorDir.'/fkooman/Rest/Plugin/Authentication/IndieAuth/autoload.php';
+require_once $vendorDir.'/fkooman/Rest/Plugin/Authentication/autoload.php';
 require_once $vendorDir.'/fkooman/Rest/Plugin/Authentication/Tls/autoload.php';
+require_once $vendorDir.'/fkooman/Tpl/autoload.php';
 require_once $vendorDir.'/fkooman/Tpl/Twig/autoload.php';
 require_once $vendorDir.'/GuzzleHttp/autoload.php';
-
-// https://bugzilla.redhat.com/show_bug.cgi?id=1264987
-require_once $vendorDir.'/React/Promise/autoload.php';

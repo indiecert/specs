@@ -2,7 +2,7 @@
 
 %global github_owner            indiecert
 %global github_name             enroll
-%global github_commit           105e0e0533ece750ee8a5470c9bb3133c7d56c15
+%global github_commit           7985f30205da7fdf963f5346b08fec228d73f921
 %global github_short            %(c=%{github_commit}; echo ${c:0:7})
 %if 0%{?rhel} == 5
 %global with_tests              0%{?_with_tests:1}
@@ -11,8 +11,8 @@
 %endif
 
 Name:       indiecert-enroll
-Version:    1.0.0
-Release:    6%{?dist}
+Version:    2.0.0
+Release:    1%{?dist}
 Summary:    IndieCert Enrollment
 
 Group:      Applications/Internet
@@ -31,12 +31,16 @@ Requires:   mod_ssl
 
 Requires:   php(language) >= 5.3.0
 Requires:   php-standard
-Requires:   php-composer(fkooman/ini) >= 1.0.0
-Requires:   php-composer(fkooman/ini) < 2.0.0
+Requires:   php-composer(fkooman/config) >= 1.0.0
+Requires:   php-composer(fkooman/config) < 2.0.0
+Requires:   php-composer(fkooman/http) >= 1.0.0
+Requires:   php-composer(fkooman/http) < 2.0.0
 Requires:   php-composer(fkooman/io) >= 1.0.0
 Requires:   php-composer(fkooman/io) < 2.0.0
 Requires:   php-composer(fkooman/rest) >= 1.0.1
 Requires:   php-composer(fkooman/rest) < 2.0.0
+Requires:   php-composer(fkooman/tpl) >= 2.0.0
+Requires:   php-composer(fkooman/tpl) < 3.0.0
 Requires:   php-composer(fkooman/tpl-twig) >= 1.0.0
 Requires:   php-composer(fkooman/tpl-twig) < 2.0.0
 Requires:   php-composer(phpseclib/phpseclib) >= 2.0.0
@@ -68,11 +72,17 @@ mkdir -p ${RPM_BUILD_ROOT}%{_datadir}/%{name}
 cp -pr web views src ${RPM_BUILD_ROOT}%{_datadir}/%{name}
 
 mkdir -p ${RPM_BUILD_ROOT}%{_bindir}
-cp -pr bin/* ${RPM_BUILD_ROOT}%{_bindir}
+(
+cd bin
+for f in `ls *`
+do
+    cp -pr ${f} ${RPM_BUILD_ROOT}%{_bindir}/%{name}-${f}
+done
+)
 
 # Config
 mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}/%{name}
-cp -p config/config.ini.default ${RPM_BUILD_ROOT}%{_sysconfdir}/%{name}/config.ini
+cp -p config/config.yaml.example ${RPM_BUILD_ROOT}%{_sysconfdir}/%{name}/config.yaml
 ln -s ../../../etc/%{name} ${RPM_BUILD_ROOT}%{_datadir}/%{name}/config
 
 # Data
@@ -91,7 +101,7 @@ fi
 %defattr(-,root,root,-)
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
 %dir %attr(-,apache,apache) %{_sysconfdir}/%{name}
-%config(noreplace) %attr(0600,apache,apache) %{_sysconfdir}/%{name}/config.ini
+%config(noreplace) %attr(0600,apache,apache) %{_sysconfdir}/%{name}/config.yaml
 %{_bindir}/*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/src
@@ -99,10 +109,13 @@ fi
 %{_datadir}/%{name}/config
 %{_datadir}/%{name}/views
 %dir %attr(0700,apache,apache) %{_localstatedir}/lib/%{name}
-%doc README.md CHANGES.md composer.json config/config.ini.default
+%doc README.md CHANGES.md composer.json config/config.yaml.example
 %license agpl-3.0.txt
 
 %changelog
+* Fri Jan 22 2016 François Kooman <fkooman@tuxed.net> - 2.0.0-1
+- update to 2.0.0
+
 * Mon Sep 28 2015 François Kooman <fkooman@tuxed.net> - 1.0.0-6
 - simpler way to require semanage
 

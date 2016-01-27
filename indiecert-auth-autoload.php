@@ -28,3 +28,4 @@ require_once $vendorDir.'/fkooman/Rest/Plugin/Authentication/Tls/autoload.php';
 require_once $vendorDir.'/fkooman/Tpl/autoload.php';
 require_once $vendorDir.'/fkooman/Tpl/Twig/autoload.php';
 require_once $vendorDir.'/GuzzleHttp/autoload.php';
+require_once $vendorDir.'/phpseclib/autoload.php';

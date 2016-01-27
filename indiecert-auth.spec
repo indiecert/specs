@@ -2,7 +2,7 @@
 
 %global github_owner            indiecert
 %global github_name             auth
-%global github_commit           545a8c808cdde89decb4d4251eae26e83101aff4
+%global github_commit           6672462333420b594dd289fc53e3f5526df9543b
 %global github_short            %(c=%{github_commit}; echo ${c:0:7})
 %if 0%{?rhel} == 5
 %global with_tests              0%{?_with_tests:1}
@@ -11,8 +11,8 @@
 %endif
 
 Name:       indiecert-auth
-Version:    2.0.1
-Release:    1%{?dist}
+Version:    2.1.0
+Release:    2%{?dist}
 Summary:    IndieCert Authentication
 
 Group:      Applications/Internet
@@ -47,7 +47,7 @@ BuildRequires:  php-composer(fkooman/io) >= 1.0.0
 BuildRequires:  php-composer(fkooman/io) < 2.0.0
 BuildRequires:  php-composer(fkooman/json) >= 1.0.0
 BuildRequires:  php-composer(fkooman/json) < 2.0.0
-BuildRequires:  php-composer(fkooman/rest) >= 1.0.0
+BuildRequires:  php-composer(fkooman/rest) >= 1.1.0
 BuildRequires:  php-composer(fkooman/rest) < 2.0.0
 BuildRequires:  php-composer(fkooman/rest-plugin-authentication) >= 2.0.0
 BuildRequires:  php-composer(fkooman/rest-plugin-authentication) < 3.0.0
@@ -57,6 +57,8 @@ BuildRequires:  php-composer(fkooman/tpl) >= 2.0.0
 BuildRequires:  php-composer(fkooman/tpl) < 3.0.0
 BuildRequires:  php-composer(fkooman/tpl-twig) >= 1.0.0
 BuildRequires:  php-composer(fkooman/tpl-twig) < 2.0.0
+BuildRequires:  php-composer(phpseclib/phpseclib) >= 2.0.0
+BuildRequires:  php-composer(phpseclib/phpseclib) < 3.0.0
 BuildRequires:  php-composer(guzzlehttp/guzzle) >= 5.3
 BuildRequires:  php-composer(guzzlehttp/guzzle) < 6.0
 %endif
@@ -78,7 +80,7 @@ Requires:   php-composer(fkooman/http) >= 1.0.0
 Requires:   php-composer(fkooman/http) < 2.0.0
 Requires:   php-composer(fkooman/io) >= 1.0.0
 Requires:   php-composer(fkooman/io) < 2.0.0
-Requires:   php-composer(fkooman/rest) >= 1.0.0
+Requires:   php-composer(fkooman/rest) >= 1.1.0
 Requires:   php-composer(fkooman/rest) < 2.0.0
 Requires:   php-composer(fkooman/rest-plugin-authentication) >= 2.0.0
 Requires:   php-composer(fkooman/rest-plugin-authentication) < 3.0.0
@@ -88,6 +90,8 @@ Requires:   php-composer(fkooman/tpl) >= 2.0.0
 Requires:   php-composer(fkooman/tpl) < 3.0.0
 Requires:   php-composer(fkooman/tpl-twig) >= 1.0.0
 Requires:   php-composer(fkooman/tpl-twig) < 2.0.0
+Requires:   php-composer(phpseclib/phpseclib) >= 2.0.0
+Requires:   php-composer(phpseclib/phpseclib) < 3.0.0
 Requires:   php-composer(guzzlehttp/guzzle) >= 5.3
 Requires:   php-composer(guzzlehttp/guzzle) < 6.0
 Requires:   php-composer(symfony/class-loader)
@@ -165,6 +169,12 @@ fi
 %license agpl-3.0.txt
 
 %changelog
+* Wed Jan 27 2016 François Kooman <fkooman@tuxed.net> - 2.1.0-2
+- rebuilt
+
+* Wed Jan 27 2016 François Kooman <fkooman@tuxed.net> - 2.1.0-1
+- update to 2.1.0
+
 * Sat Jan 23 2016 François Kooman <fkooman@tuxed.net> - 2.0.1-1
 - update to 2.0.1
 

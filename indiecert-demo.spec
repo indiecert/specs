@@ -2,11 +2,11 @@
 
 %global github_owner            indiecert
 %global github_name             demo
-%global github_commit           d681b7bf463e3a5f98456aae3f985eb58b27e27c
+%global github_commit           88c6bf592daeb0f807719f5d80cd167596cabeb4
 %global github_short            %(c=%{github_commit}; echo ${c:0:7})
 
 Name:       indiecert-demo
-Version:    1.0.2
+Version:    1.0.3
 Release:    1%{?dist}
 Summary:    IndieCert Demo
 
@@ -77,6 +77,9 @@ rm -rf %{buildroot}
 %license agpl-3.0.txt
 
 %changelog
+* Wed Jan 27 2016 François Kooman <fkooman@tuxed.net> - 1.0.3-1
+- update to 1.0.3
+
 * Wed Jan 27 2016 François Kooman <fkooman@tuxed.net> - 1.0.2-1
 - update to 1.0.2
 

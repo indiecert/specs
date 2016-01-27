@@ -7,7 +7,7 @@
 
 Name:       indiecert-demo
 Version:    1.0.3
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    IndieCert Demo
 
 Group:      Applications/Internet
@@ -38,6 +38,9 @@ Requires:   php-composer(guzzlehttp/guzzle) >= 5.3
 Requires:   php-composer(guzzlehttp/guzzle) < 6.0
 Requires:   php-composer(symfony/class-loader)
 
+Requires(post): %{_sbindir}/semanage
+Requires(postun): %{_sbindir}/semanage
+
 %description
 IndieCert Demo.
 
@@ -63,6 +66,15 @@ mkdir -p ${RPM_BUILD_ROOT}%{_localstatedir}/lib/%{name}
 %clean
 rm -rf %{buildroot}
 
+%post
+semanage fcontext -a -t httpd_sys_rw_content_t '%{_localstatedir}/lib/%{name}(/.*)?' 2>/dev/null || :
+restorecon -R %{_localstatedir}/lib/%{name} || :
+
+%postun
+if [ $1 -eq 0 ] ; then  # final removal
+semanage fcontext -d -t httpd_sys_rw_content_t '%{_localstatedir}/lib/%{name}(/.*)?' 2>/dev/null || :
+fi
+
 %files
 %defattr(-,root,root,-)
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
@@ -73,10 +85,14 @@ rm -rf %{buildroot}
 %{_datadir}/%{name}/web
 %{_datadir}/%{name}/views
 %{_datadir}/%{name}/config
+%dir %attr(0700,apache,apache) %{_localstatedir}/lib/%{name}
 %doc README.md CHANGES.md composer.json config/config.yaml.example
 %license agpl-3.0.txt
 
 %changelog
+* Wed Jan 27 2016 François Kooman <fkooman@tuxed.net> - 1.0.3-2
+- add localstatedir
+
 * Wed Jan 27 2016 François Kooman <fkooman@tuxed.net> - 1.0.3-1
 - update to 1.0.3
 

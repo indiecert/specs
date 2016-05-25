@@ -2,7 +2,7 @@
 
 %global github_owner            indiecert
 %global github_name             auth
-%global github_commit           8634bf26233262f55aa803eb325b62cf653c3e35
+%global github_commit           2fb1132579476d93eb437af6c082a61e11db2975
 %global github_short            %(c=%{github_commit}; echo ${c:0:7})
 %if 0%{?rhel} == 5
 %global with_tests              0%{?_with_tests:1}
@@ -11,7 +11,7 @@
 %endif
 
 Name:       indiecert-auth
-Version:    2.1.3
+Version:    2.1.5
 Release:    1%{?dist}
 Summary:    IndieCert Authentication
 
@@ -43,10 +43,10 @@ BuildRequires:  php-composer(fkooman/config) >= 1.0.0
 BuildRequires:  php-composer(fkooman/config) < 2.0.0
 BuildRequires:  php-composer(fkooman/http) >= 1.0.0
 BuildRequires:  php-composer(fkooman/http) < 2.0.0
-BuildRequires:  php-composer(fkooman/io) >= 1.0.0
-BuildRequires:  php-composer(fkooman/io) < 2.0.0
-BuildRequires:  php-composer(fkooman/json) >= 1.0.0
-BuildRequires:  php-composer(fkooman/json) < 2.0.0
+BuildRequires:  php-composer(fkooman/io) >= 2.0.0
+BuildRequires:  php-composer(fkooman/io) < 3.0.0
+BuildRequires:  php-composer(fkooman/json) >= 2.0.0
+BuildRequires:  php-composer(fkooman/json) < 3.0.0
 BuildRequires:  php-composer(fkooman/rest) >= 1.1.0
 BuildRequires:  php-composer(fkooman/rest) < 2.0.0
 BuildRequires:  php-composer(fkooman/rest-plugin-authentication) >= 2.0.0
@@ -78,8 +78,8 @@ Requires:   php-composer(fkooman/config) >= 1.0.0
 Requires:   php-composer(fkooman/config) < 2.0.0
 Requires:   php-composer(fkooman/http) >= 1.0.0
 Requires:   php-composer(fkooman/http) < 2.0.0
-Requires:   php-composer(fkooman/io) >= 1.0.0
-Requires:   php-composer(fkooman/io) < 2.0.0
+Requires:   php-composer(fkooman/io) >= 2.0.0
+Requires:   php-composer(fkooman/io) < 3.0.0
 Requires:   php-composer(fkooman/rest) >= 1.1.0
 Requires:   php-composer(fkooman/rest) < 2.0.0
 Requires:   php-composer(fkooman/rest-plugin-authentication) >= 2.0.0
@@ -169,6 +169,12 @@ fi
 %license agpl-3.0.txt
 
 %changelog
+* Wed May 25 2016 François Kooman <fkooman@tuxed.net> - 2.1.5-1
+- update to 2.1.5
+
+* Wed May 25 2016 François Kooman <fkooman@tuxed.net> - 2.1.4-1
+- update to 2.1.4
+
 * Wed Jan 27 2016 François Kooman <fkooman@tuxed.net> - 2.1.3-1
 - update to 2.1.3
 

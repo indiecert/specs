@@ -2,7 +2,7 @@
 
 %global github_owner            indiecert
 %global github_name             auth
-%global github_commit           2fb1132579476d93eb437af6c082a61e11db2975
+%global github_commit           df73d70ac4a3147d3625e7a5251ed581ebb5bb24
 %global github_short            %(c=%{github_commit}; echo ${c:0:7})
 %if 0%{?rhel} == 5
 %global with_tests              0%{?_with_tests:1}
@@ -11,7 +11,7 @@
 %endif
 
 Name:       indiecert-auth
-Version:    2.1.5
+Version:    2.1.6
 Release:    1%{?dist}
 Summary:    IndieCert Authentication
 
@@ -169,6 +169,9 @@ fi
 %license agpl-3.0.txt
 
 %changelog
+* Wed Jun 08 2016 François Kooman <fkooman@tuxed.net> - 2.1.6-1
+- update to 2.1.6
+
 * Wed May 25 2016 François Kooman <fkooman@tuxed.net> - 2.1.5-1
 - update to 2.1.5
 
